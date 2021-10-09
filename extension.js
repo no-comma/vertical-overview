@@ -13,6 +13,7 @@ const DashOverride = Self.imports.dash;
 const Gestures = Self.imports.gestures;
 const Background = imports.ui.background;
 const WorkspaceOverrides = Self.imports.workspace;
+const AppDisplayOverrides = Self.imports.appDisplay;
 
 function init() {
 }
@@ -29,6 +30,7 @@ function enable() {
     WorkspaceOverrides.override();
     Gestures.override();
     DashOverride.override();
+    AppDisplayOverrides.override();
 
     //this is the magic function that switches the internal layout to vertical
     global.workspace_manager.override_workspace_layout(Meta.DisplayCorner.TOPLEFT, true, -1, 1);
@@ -49,6 +51,7 @@ function disable() {
     WorkspaceThumbnailOverrides.reset();
     Gestures.reset();
     DashOverride.reset(true);
+    AppDisplayOverrides.reset();
 
     rebind_keys(Main.overview._overview._controls);
 
