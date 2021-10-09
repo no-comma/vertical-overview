@@ -92,16 +92,16 @@ var ControlsManagerLayoutOverride = {
         switch (state) {
         case ControlsState.HIDDEN:
         case ControlsState.WINDOW_PICKER:
-            appDisplayBox.set_origin(0, box.y2);
+            appDisplayBox.set_origin(this.leftOffset, box.y2);
             break;
         case ControlsState.APP_GRID:
-            appDisplayBox.set_origin(0,
+            appDisplayBox.set_origin(this.leftOffset,
                 startY + searchHeight + spacing);
             break;
         }
 
-        appDisplayBox.set_size(width,
-            height - startY - searchHeight - spacing
+        appDisplayBox.set_size(width - this.leftOffset - this.rightOffset,
+            height - searchHeight - spacing
         );
 
         return appDisplayBox;
