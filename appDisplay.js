@@ -39,9 +39,12 @@ function override() {
     appDisplay._nextPageArrow.x_align = Clutter.ActorAlign.CENTER;
     appDisplay._nextPageArrow.y_align = Clutter.ActorAlign.END;
     appDisplay._nextPageArrow.y_expand = true;
+    appDisplay._nextPageArrow.rotation_angle_z = -90;
     appDisplay._prevPageArrow.x_align = Clutter.ActorAlign.CENTER;
     appDisplay._prevPageArrow.y_align = Clutter.ActorAlign.START;
     appDisplay._prevPageArrow.y_expand = true;
+    appDisplay._prevPageArrow.rotation_angle_z = -90;
+    appDisplay._prevPageArrow.y = 24;
 
     appDisplay._box.vertical = false;
 
@@ -71,10 +74,13 @@ function reset() {
     appDisplay._nextPageArrow.x_align = Clutter.ActorAlign.END;
     appDisplay._nextPageArrow.y_align = Clutter.ActorAlign.CENTER;
     appDisplay._nextPageArrow.y_expand = false;
+    appDisplay._nextPageArrow.rotation_angle_z = 0;
     appDisplay._prevPageArrow.x_align = Clutter.ActorAlign.START;
     appDisplay._prevPageArrow.y_align = Clutter.ActorAlign.CENTER;
     appDisplay._prevPageArrow.y_expand = false;
-
+    appDisplay._prevPageArrow.rotation_angle_z = 0;
+    appDisplay._prevPageArrow.y = 0;
+    
     appDisplay._box.vertical = true;
 
     Util.overrideProto(AppDisplay.BaseAppView.prototype, global.vertical_overview.GSFunctions['BaseAppView']);
