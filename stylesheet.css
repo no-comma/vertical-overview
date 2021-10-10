@@ -100,3 +100,18 @@
 	border-radius: 10px 0 0 10px;
 	border-right-width: 0;
 }
+
+/* App grid */
+.vertical-overview.page-navigation-hint.previous {
+	background-gradient-start: transparent;
+	background-gradient-end: rgba(255, 255, 255, 0.05);
+	background-gradient-direction: vertical;
+	border-radius: 0px 0px 15px 15px;
+}
+
+.vertical-overview.page-navigation-hint.next {
+	background-gradient-start: rgba(255, 255, 255, 0.05);
+	background-gradient-end: transparent;
+	background-gradient-direction: vertical;
+	border-radius: 15px 15px 0px 0px;
+}
