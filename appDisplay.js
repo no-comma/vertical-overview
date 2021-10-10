@@ -17,6 +17,8 @@ var SidePages = {
 };
 
 function override() {
+    global.vertical_overview.GSFunctions['BaseAppView'] = Util.overrideProto(AppDisplay.BaseAppView.prototype, BaseAppViewOverride);
+    
     let appDisplay = Main.overview._overview._controls._appDisplay;
     
     appDisplay._orientation = Clutter.Orientation.VERTICAL;    
@@ -31,27 +33,30 @@ function override() {
 
     appDisplay._nextPageIndicator.x_align = Clutter.ActorAlign.FILL;
     appDisplay._nextPageIndicator.y_align = Clutter.ActorAlign.END;
+    appDisplay._nextPageIndicator.translation_x = 0;
     appDisplay._nextPageIndicator.add_style_class_name('vertical-overview');
     appDisplay._prevPageIndicator.x_align = Clutter.ActorAlign.FILL;
     appDisplay._prevPageIndicator.y_align = Clutter.ActorAlign.START;
+    appDisplay._prevPageIndicator.translation_x = 0;
     appDisplay._prevPageIndicator.add_style_class_name('vertical-overview');
     
     appDisplay._nextPageArrow.x_align = Clutter.ActorAlign.CENTER;
     appDisplay._nextPageArrow.y_align = Clutter.ActorAlign.END;
     appDisplay._nextPageArrow.y_expand = true;
+    appDisplay._nextPageArrow.translation_x = 0;
     appDisplay._nextPageArrow.rotation_angle_z = -90;
     appDisplay._prevPageArrow.x_align = Clutter.ActorAlign.CENTER;
     appDisplay._prevPageArrow.y_align = Clutter.ActorAlign.START;
     appDisplay._prevPageArrow.y_expand = true;
+    appDisplay._prevPageArrow.translation_x = 0;
     appDisplay._prevPageArrow.rotation_angle_z = -90;
-    appDisplay._prevPageArrow.y = 24;
 
     appDisplay._box.vertical = false;
-
-    global.vertical_overview.GSFunctions['BaseAppView'] = Util.overrideProto(AppDisplay.BaseAppView.prototype, BaseAppViewOverride);
 }
 
 function reset() {
+    Util.overrideProto(AppDisplay.BaseAppView.prototype, global.vertical_overview.GSFunctions['BaseAppView']);
+    
     let appDisplay = Main.overview._overview._controls._appDisplay;
     
     appDisplay._orientation = Clutter.Orientation.HORIZONTAL;
@@ -66,24 +71,25 @@ function reset() {
 
     appDisplay._nextPageIndicator.x_align = Clutter.ActorAlign.END;
     appDisplay._nextPageIndicator.y_align = Clutter.ActorAlign.FILL;
+    appDisplay._nextPageIndicator.translation_y = 0;
     appDisplay._nextPageIndicator.remove_style_class_name('vertical-overview');
     appDisplay._prevPageIndicator.x_align = Clutter.ActorAlign.START;
     appDisplay._prevPageIndicator.y_align = Clutter.ActorAlign.FILL;
+    appDisplay._prevPageIndicator.translation_y = 0;
     appDisplay._prevPageIndicator.remove_style_class_name('vertical-overview');
 
     appDisplay._nextPageArrow.x_align = Clutter.ActorAlign.END;
-    appDisplay._nextPageArrow.y_align = Clutter.ActorAlign.CENTER;
+    appDisplay._nextPageArrow.y_align = Clutter.ActorAlign.FILL;
     appDisplay._nextPageArrow.y_expand = false;
+    appDisplay._nextPageArrow.translation_y = 0;
     appDisplay._nextPageArrow.rotation_angle_z = 0;
     appDisplay._prevPageArrow.x_align = Clutter.ActorAlign.START;
-    appDisplay._prevPageArrow.y_align = Clutter.ActorAlign.CENTER;
+    appDisplay._prevPageArrow.y_align = Clutter.ActorAlign.FILL;
     appDisplay._prevPageArrow.y_expand = false;
+    appDisplay._prevPageArrow.translation_y = 0;
     appDisplay._prevPageArrow.rotation_angle_z = 0;
-    appDisplay._prevPageArrow.y = 0;
     
     appDisplay._box.vertical = true;
-
-    Util.overrideProto(AppDisplay.BaseAppView.prototype, global.vertical_overview.GSFunctions['BaseAppView']);
 }
 
 var BaseAppViewOverride = {
@@ -120,7 +126,7 @@ var BaseAppViewOverride = {
             Math.floor(availHeight * 0.02);
         this._grid.layout_manager.pagePadding.bottom =
             Math.ceil(availHeight * 0.02);
-        
+
         this._grid.adaptToSize(pageWidth, pageHeight);
         this._grid.height = pageHeight;
 
@@ -143,9 +149,9 @@ var BaseAppViewOverride = {
         this._availWidth = availWidth;
         this._availHeight = availHeight;
 
-        this._pageIndicatorOffset = leftPadding;
+        this._pageIndicatorOffset = topPadding;
         this._pageArrowOffset = Math.max(
-            leftPadding - PAGE_PREVIEW_MAX_ARROW_OFFSET, 0);
+            topPadding - PAGE_PREVIEW_MAX_ARROW_OFFSET, 0);
     },
 
     _getIndicatorOffset(page, progress, baseOffset) {
@@ -167,7 +173,7 @@ var BaseAppViewOverride = {
 
         const indicator = page > 0
             ? this._nextPageIndicator : this._prevPageIndicator;
-
+        
         const notifyId = adjustment.connect('notify::value', () => {
             const nextPage = this._grid.currentPage + page;
             const hasFollowingPage = nextPage >= 0 &&
