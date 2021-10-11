@@ -31,6 +31,27 @@ function override() {
     appDisplay._pageIndicators.vertical = true;
     appDisplay._pageIndicators.y_align = Clutter.ActorAlign.CENTER;
 
+    appDisplay._adjustment = appDisplay._scrollView.vscroll.adjustment;
+    appDisplay._adjustment.connect('notify::value', adj => {
+        appDisplay._updateFade();
+        const value = adj.value / adj.page_size;
+        appDisplay._pageIndicators.setCurrentPosition(value);
+        
+        const distanceToPage = Math.abs(Math.round(value) - value);
+        if (distanceToPage < 0.001) {
+            appDisplay._hintContainer.opacity = 255;
+            appDisplay._hintContainer.translationY = 0;
+        } else {
+            appDisplay._hintContainer.remove_transition('opacity');
+            let opacity = Math.clamp(
+                255 * (1 - (distanceToPage * 2)),
+                0, 255);
+            
+            appDisplay._hintContainer.translationY = (Math.round(value) - value) * adj.page_size;
+            appDisplay._hintContainer.opacity = opacity;
+        }
+    });
+
     appDisplay._nextPageIndicator.x_align = Clutter.ActorAlign.FILL;
     appDisplay._nextPageIndicator.y_align = Clutter.ActorAlign.END;
     appDisplay._nextPageIndicator.translation_x = 0;
@@ -64,6 +85,7 @@ function reset() {
     appDisplay._scrollView.set_policy(St.PolicyType.EXTERNAL, St.PolicyType.NEVER);
 
     appDisplay._grid.y_align = Clutter.ActorAlign.FILL;
+    appDisplay._grid.height = 0;
 
     appDisplay._pageIndicators.y_expand = false;
     appDisplay._pageIndicators.vertical = false;
